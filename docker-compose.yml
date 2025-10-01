@@ -1,17 +1,37 @@
-version: "3.9"
 services:
   postgres:
-    image: postgres:15
+    image: postgres:17.6-bookworm
     container_name: postgres_graduation
     restart: always
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
     ports:
       - "5435:5432"
     volumes:
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
       - postgres_data:/var/lib/postgresql/data
+    command: postgres -c 'max_connections=500'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: graduation_project_db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d graduation_project_db -h localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_graduation
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
 
   redis:
     image: redis:7
@@ -22,6 +42,24 @@ services:
     volumes:
       - redis_data:/data
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: application
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/graduation_project_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+    ports:
+      - "8080:8080"
+
 volumes:
   postgres_data:
+  pgadmin_data:
   redis_data:
