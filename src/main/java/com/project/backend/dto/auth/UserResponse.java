@@ -28,7 +28,7 @@ public class UserResponse {
         userResponse.setCreatedAt(user.getCreatedAt());
         userResponse.setUpdatedAt(user.getUpdatedAt());
         userResponse.setLastLogin(user.getLastLogin());
-        userResponse.setRole(user.getRole());
+        userResponse.setRole(user.getRole().toString());
         userResponse.setStatus(user.getStatus());
         return userResponse;
     }

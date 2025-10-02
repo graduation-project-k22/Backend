@@ -1,5 +1,6 @@
 package com.project.backend.entity;
 
+import com.project.backend.enums.ERole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,10 +11,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.time.Instant;
 import java.util.Date;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
+@Data
 @Table(name = "users")
 public class User {
 
@@ -47,7 +50,7 @@ public class User {
     private Date updatedAt;
     private Instant lastLogin;
 
-    private String role;   // user / admin / moderator
+    private ERole role;   // user / admin / moderator
     private String status; // active / inactive / banned
 
     public static UserBuilder builder() {
@@ -66,7 +69,7 @@ public class User {
         private Date createdAt;
         private Date updatedAt;
         private Instant lastLogin;
-        private String role;
+        private ERole role;
         private String status;
 
         public UserBuilder username(String username) {
@@ -124,7 +127,7 @@ public class User {
             return this;
         }
 
-        public UserBuilder role(String role) {
+        public UserBuilder role(ERole role) {
             this.role = role;
             return this;
         }
@@ -151,118 +154,6 @@ public class User {
             user.setStatus(status);
             return user;
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getGgId() {
-        return ggId;
-    }
-
-    public void setGgId(String ggId) {
-        this.ggId = ggId;
-    }
-
-    public String getFbId() {
-        return fbId;
-    }
-
-    public void setFbId(String fbId) {
-        this.fbId = fbId;
-    }
-
-    public Integer getStreak() {
-        return streak;
-    }
-
-    public void setStreak(Integer streak) {
-        this.streak = streak;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Instant getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(Instant lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
 
