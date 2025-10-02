@@ -6,6 +6,7 @@ import com.project.backend.dto.auth.RegisterRequest;
 import com.project.backend.dto.auth.TokenResponse;
 import com.project.backend.dto.auth.UserResponse;
 import com.project.backend.entity.User;
+import com.project.backend.enums.ERole;
 import com.project.backend.repository.UserRepository;
 import com.project.backend.service.AuthService;
 import io.jsonwebtoken.Claims;
@@ -40,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
             .email(req.getEmail())
             .phone(req.getPhone())
             .password(encoder.encode(req.getPassword()))
-            .role("USER")
+            .role(ERole.USER)
             .status("ACTIVE")
             .build();
         user = userRepo.save(user);
@@ -56,8 +57,8 @@ public class AuthServiceImpl implements AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getUsername(), user.getRole());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), user.getRole());
+        String accessToken = jwtUtil.generateAccessToken(user.getUsername(), user.getRole().toString());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), user.getRole().toString());
 
         user.setLastLogin(Instant.now());
         userRepo.save(user);

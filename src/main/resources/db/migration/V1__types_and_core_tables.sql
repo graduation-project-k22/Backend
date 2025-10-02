@@ -3,7 +3,7 @@
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_t') THEN
-CREATE TYPE role_t AS ENUM ('QLY','NDUNG','CTV');
+CREATE TYPE role_t AS ENUM ('ADMIN','USER','COLLABORATOR');
 END IF;
 END$$;
 
